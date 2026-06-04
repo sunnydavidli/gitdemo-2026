@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Get Users</title>
+  </head>
+  <body>
+    <h1>Get Users</h1>
+    <form id="getUsersForm">
+      <label for="userId">User ID:</label>
+      <input type="text" id="userId" name="userId">
+      <br>
+      <button type="submit">Get User</button>
+    </form>
+    <br>
+    <div id="userDetails"></div>
+    <script>
+      const form = document.getElementById('getUsersForm');
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const userId = document.getElementById('userId').value;
+        const response = await fetch(`http://127.0.0.1:5000/users/${userId}`);
+        const user = await response.json();
+        const userDetails = document.getElementById('userDetails');
+        if (user.user_id) {
+          userDetails.innerHTML = `<p>Name: ${user.name}</p>
+                                    <p>Email: ${user.email}</p>
+                                    <p>Phone: ${user.phone}</p>
+                                    <p>Address: ${user.address}</p>
+                                    <p>Country: ${user.country}</p>`;
+        } else {
+          userDetails.innerHTML = 'User not found';
+        }
+      });
+    </script>
+  </body>
+</html>

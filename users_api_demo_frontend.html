@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Users API Frontend Demo</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      background: #f4f6f8;
+      color: #222;
+    }
+
+    header {
+      background: #1f4e79;
+      color: white;
+      padding: 22px 32px;
+    }
+
+    header h1 {
+      margin: 0 0 6px 0;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 15px;
+      opacity: 0.95;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 24px auto;
+      padding: 0 18px 32px;
+    }
+
+    .notice {
+      background: #fff8dc;
+      border-left: 5px solid #d99b00;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      border-radius: 8px;
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 20px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #1f4e79;
+      font-size: 21px;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 6px;
+      padding: 10px;
+      border: 1px solid #c8c8c8;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    button {
+      margin-top: 14px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #1f4e79;
+      color: white;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    button.secondary {
+      background: #4f6f8f;
+      margin-left: 8px;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .status {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #eef3f8;
+      min-height: 20px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .success {
+      background: #e8f6ef;
+      color: #106b3c;
+    }
+
+    .error {
+      background: #fdecec;
+      color: #9b1c1c;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background: white;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f4e79;
+      color: white;
+    }
+
+    tr:hover {
+      background: #f5f9fd;
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    code {
+      background: #eef3f8;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Users API Frontend Demo</h1>
+    <p>A simple HTML frontend connected to the Python Flask backend API.</p>
+  </header>
+
+  <main>
+    <div class="notice">
+      Before opening this HTML file, please run the Flask backend first:
+      <code>python Week13_1_UsersAPI.py</code>.
+      The API base URL used by this page is <code>http://127.0.0.1:5000</code>.
+    </div>
+
+    <section class="grid">
+      <div class="card">
+        <h2>1. Get User by ID</h2>
+        <form id="getUserForm">
+          <label for="getUserId">User ID</label>
+          <input type="number" id="getUserId" placeholder="Example: 1" required />
+          <button type="submit">Get User</button>
+        </form>
+        <div id="singleUserResult" class="status"></div>
+      </div>
+
+      <div class="card">
+        <h2>2. Create New User</h2>
+        <form id="createUserForm">
+          <label for="createName">Name</label>
+          <input type="text" id="createName" required />
+
+          <label for="createEmail">Email</label>
+          <input type="email" id="createEmail" required />
+
+          <label for="createPhone">Phone</label>
+          <input type="text" id="createPhone" required />
+
+          <label for="createAddress">Address</label>
+          <input type="text" id="createAddress" required />
+
+          <label for="createCountry">Country</label>
+          <input type="text" id="createCountry" required />
+
+          <button type="submit">Create User</button>
+        </form>
+        <div id="createResult" class="status"></div>
+      </div>
+
+      <div class="card">
+        <h2>3. Update User</h2>
+        <form id="updateUserForm">
+          <label for="updateUserId">User ID to Update</label>
+          <input type="number" id="updateUserId" required />
+
+          <label for="updateName">Name</label>
+          <input type="text" id="updateName" required />
+
+          <label for="updateEmail">Email</label>
+          <input type="email" id="updateEmail" required />
+
+          <label for="updatePhone">Phone</label>
+          <input type="text" id="updatePhone" required />
+
+          <label for="updateAddress">Address</label>
+          <input type="text" id="updateAddress" required />
+
+          <label for="updateCountry">Country</label>
+          <input type="text" id="updateCountry" required />
+
+          <button type="submit">Update User</button>
+        </form>
+        <div id="updateResult" class="status"></div>
+      </div>
+
+      <div class="card wide">
+        <h2>4. Get All Users</h2>
+        <button id="loadUsersButton">Load All Users</button>
+        <button id="clearTableButton" class="secondary">Clear Table</button>
+        <div id="allUsersResult" class="status"></div>
+        <div id="usersTableContainer"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const API_BASE_URL = "http://127.0.0.1:5000";
+
+    function showMessage(elementId, message, type = "") {
+      const element = document.getElementById(elementId);
+      element.className = `status ${type}`;
+      element.textContent = message;
+    }
+
+    function normalizeUserId(user) {
+      // The backend returns user_id for single user,
+      // but currently returns user_Id for all users.
+      return user.user_id || user.user_Id || "";
+    }
+
+    function formatUser(user) {
+      const id = normalizeUserId(user);
+      if (!id) {
+        return "User not found.";
+      }
+
+      return `User ID: ${id}
+Name: ${user.name}
+Email: ${user.email}
+Phone: ${user.phone}
+Address: ${user.address}
+Country: ${user.country}`;
+    }
+
+    function getFormUser(prefix) {
+      return {
+        name: document.getElementById(`${prefix}Name`).value.trim(),
+        email: document.getElementById(`${prefix}Email`).value.trim(),
+        phone: document.getElementById(`${prefix}Phone`).value.trim(),
+        address: document.getElementById(`${prefix}Address`).value.trim(),
+        country: document.getElementById(`${prefix}Country`).value.trim()
+      };
+    }
+
+    async function apiRequest(url, options = {}) {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      return await response.json();
+    }
+
+    document.getElementById("getUserForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const userId = document.getElementById("getUserId").value;
+      showMessage("singleUserResult", "Loading...");
+
+      try {
+        const user = await apiRequest(`${API_BASE_URL}/users/${userId}`);
+        if (normalizeUserId(user)) {
+          showMessage("singleUserResult", formatUser(user), "success");
+
+          // Automatically copy data into the update form for easy classroom demo.
+          document.getElementById("updateUserId").value = normalizeUserId(user);
+          document.getElementById("updateName").value = user.name || "";
+          document.getElementById("updateEmail").value = user.email || "";
+          document.getElementById("updatePhone").value = user.phone || "";
+          document.getElementById("updateAddress").value = user.address || "";
+          document.getElementById("updateCountry").value = user.country || "";
+        } else {
+          showMessage("singleUserResult", "User not found.", "error");
+        }
+      } catch (error) {
+        showMessage("singleUserResult", `Failed to get user.\n${error.message}`, "error");
+      }
+    });
+
+    document.getElementById("createUserForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const newUser = getFormUser("create");
+      showMessage("createResult", "Creating user...");
+
+      try {
+        const createdUser = await apiRequest(`${API_BASE_URL}/users`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(newUser)
+        });
+
+        showMessage("createResult", `User created successfully.\n\n${formatUser(createdUser)}`, "success");
+        document.getElementById("createUserForm").reset();
+        loadAllUsers();
+      } catch (error) {
+        showMessage("createResult", `Failed to create user.\n${error.message}`, "error");
+      }
+    });
+
+    document.getElementById("updateUserForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const userId = document.getElementById("updateUserId").value;
+      const updatedUserData = getFormUser("update");
+      showMessage("updateResult", "Updating user...");
+
+      try {
+        const updatedUser = await apiRequest(`${API_BASE_URL}/users/${userId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(updatedUserData)
+        });
+
+        if (normalizeUserId(updatedUser)) {
+          showMessage("updateResult", `User updated successfully.\n\n${formatUser(updatedUser)}`, "success");
+          loadAllUsers();
+        } else {
+          showMessage("updateResult", "Update failed. Please check whether the user ID exists.", "error");
+        }
+      } catch (error) {
+        showMessage("updateResult", `Failed to update user.\n${error.message}`, "error");
+      }
+    });
+
+    async function loadAllUsers() {
+      showMessage("allUsersResult", "Loading all users...");
+
+      try {
+        const users = await apiRequest(`${API_BASE_URL}/users`);
+        showMessage("allUsersResult", `Loaded ${users.length} user(s).`, "success");
+        renderUsersTable(users);
+      } catch (error) {
+        showMessage("allUsersResult", `Failed to load users.\n${error.message}`, "error");
+      }
+    }
+
+    function renderUsersTable(users) {
+      const container = document.getElementById("usersTableContainer");
+
+      if (!users || users.length === 0) {
+        container.innerHTML = "<p>No users found.</p>";
+        return;
+      }
+
+      let rows = users.map(user => `
+        <tr>
+          <td>${normalizeUserId(user)}</td>
+          <td>${user.name || ""}</td>
+          <td>${user.email || ""}</td>
+          <td>${user.phone || ""}</td>
+          <td>${user.address || ""}</td>
+          <td>${user.country || ""}</td>
+          <td>
+            <button onclick="fillUpdateForm(${normalizeUserId(user)})">Edit</button>
+          </td>
+        </tr>
+      `).join("");
+
+      container.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>User ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>Country</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    async function fillUpdateForm(userId) {
+      try {
+        const user = await apiRequest(`${API_BASE_URL}/users/${userId}`);
+        document.getElementById("updateUserId").value = normalizeUserId(user);
+        document.getElementById("updateName").value = user.name || "";
+        document.getElementById("updateEmail").value = user.email || "";
+        document.getElementById("updatePhone").value = user.phone || "";
+        document.getElementById("updateAddress").value = user.address || "";
+        document.getElementById("updateCountry").value = user.country || "";
+        showMessage("updateResult", "User data copied into the update form. You can now modify and submit it.", "success");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } catch (error) {
+        showMessage("updateResult", `Failed to load selected user.\n${error.message}`, "error");
+      }
+    }
+
+    document.getElementById("loadUsersButton").addEventListener("click", loadAllUsers);
+
+    document.getElementById("clearTableButton").addEventListener("click", () => {
+      document.getElementById("usersTableContainer").innerHTML = "";
+      showMessage("allUsersResult", "Table cleared.");
+    });
+
+    // Load users automatically when the page is opened.
+    loadAllUsers();
+  </script>
+</body>
+</html>
