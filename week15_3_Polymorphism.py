@@ -113,3 +113,6 @@ if __name__ == '__main__':
 
     Manager(dog1).recordTime()
     print()
+
+
+print("this is a demonstration of using the git to track the program change.")
